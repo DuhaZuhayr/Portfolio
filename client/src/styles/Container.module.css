@@ -1,0 +1,87 @@
+/* navbar */
+.nav {
+  position: fixed;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 1rem;
+}
+@media (min-width: 640px) {
+  .nav {
+    padding: 2rem 17rem;
+  }
+}
+.nav .desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+}
+@media (min-width: 640px) {
+  .nav .desktop-nav {
+    display: flex;
+  }
+}
+
+/* burger menu */
+.burger {
+  position: relative;
+  height: 10rem;
+  width: 10rem;
+  border: 0;
+  background: transparent;
+  transition: opacity 300ms;
+}
+.burger svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(200%, -38%) scale(1);
+  opacity: 1;
+  transition: all 300ms;
+}
+.burger svg[data-hide="true"] {
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+/* preloader */
+.introduction {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 99;
+  background-color: hsl(240 27.9% 5.7%);
+}
+.introduction svg {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: calc(100% + 300px);
+}
+.introduction svg path {
+  fill: hsl(240 27.9% 5.7%);
+}
+.introduction p {
+  display: flex;
+  color: white;
+  font-size: 42px;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+}
+.introduction p span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  margin-right: 10px;
+}
