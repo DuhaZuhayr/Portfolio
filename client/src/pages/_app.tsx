@@ -2,11 +2,12 @@ import { type AppType } from "next/dist/shared/lib/utils";
 import { useEffect, useState } from "react";
 
 import "@/styles/globals.css";
-import "@/styles/locomotive-scroll.css";
+
 
 import { DM_Sans } from "next/font/google";
 
 import Preloader from "@/components/Preloader";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const dmSans = DM_Sans({
   display: "swap",
@@ -21,23 +22,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    let scroll: any;
-    import("locomotive-scroll").then((locomotiveModule) => {
-      scroll = new locomotiveModule.default();
-    });
-    return () => {
-      if (scroll) scroll.destroy();
-    };
-  }, []);
-
   return (
-    <>
-      {showPreloader && <Preloader />}
-      <div lang={"en"} className={dmSans.className} data-scroll-container>
-        <Component {...pageProps} />
-      </div>
-    </>
+    <ErrorBoundary>
+      <>
+        {showPreloader && <Preloader />}
+        <div lang={"en"} className={dmSans.className}>
+          <Component {...pageProps} />
+        </div>
+      </>
+    </ErrorBoundary>
   );
 };
 

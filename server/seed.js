@@ -16,12 +16,13 @@ const seedData = async () => {
     console.log('🗑️  Cleared existing data');
 
     // Create admin user
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
     const admin = new Admin({
       username: 'admin',
-      password: 'admin123'
+      password: adminPassword
     });
     await admin.save();
-    console.log('👤 Admin created (username: admin, password: admin123)');
+    console.log('👤 Admin created (username: admin)');
 
     // Seed projects
     const projects = [
@@ -106,7 +107,7 @@ const seedData = async () => {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('Admin Login:');
     console.log('  Username: admin');
-    console.log('  Password: admin123');
+    console.log(`  Password: ${adminPassword}`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     
     process.exit(0);

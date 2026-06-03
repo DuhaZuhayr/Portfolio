@@ -2,8 +2,9 @@
 
 A premium, production-ready personal portfolio web application built with modern technologies. Features a stunning dark-themed UI with glassmorphism effects, smooth animations, and a full admin dashboard.
 
-![Tech Stack](https://img.shields.io/badge/React-Vite-blue?style=flat-square&logo=react)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat-square&logo=tailwindcss)
+![Tech Stack](https://img.shields.io/badge/React-18.2-blue?style=flat-square&logo=react)
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3.3-06B6D4?style=flat-square&logo=tailwindcss)
 ![Express](https://img.shields.io/badge/Express.js-Node-green?style=flat-square&logo=express)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=flat-square&logo=mongodb)
 
@@ -12,52 +13,53 @@ A premium, production-ready personal portfolio web application built with modern
 ## ✨ Features
 
 ### 🎨 Frontend
-- **Hero Section** — Full-screen landing with typing animation, particle background, gradient orbs
-- **About Me** — Profile image, bio, animated stats, resume download
+- **Hero Section** — Full-screen landing with gradient orbs, tech stack pills, and profile image
+- **About Me** — Bio, animated stats
 - **Skills** — Categorized skill cards with animated progress bars
-- **Projects** — Dynamic project cards with filter tabs, hover effects, modal view (fetched from API)
+- **Projects** — Dynamic project carousel with hover effects
 - **Experience** — Timeline layout with color-coded entries
+- **Services** — Service offerings grid
 - **Contact** — Functional form connected to backend with email notifications
-- **Dark/Light Mode** — Toggle with localStorage persistence
-- **Loading Screen** — Animated logo with progress bar
-- **Scroll-To-Top** — Floating button
-- **Responsive** — Mobile-first design
+- **Responsive** — Mobile-first design with hamburger menu
+- **Smooth Animations** — Framer Motion scroll-based reveal animations
 
 ### ⚙️ Backend
 - **RESTful API** — Express.js with MongoDB
 - **JWT Authentication** — Secure admin routes
 - **Contact Form** — Rate-limited with email notifications (NodeMailer)
 - **GitHub Integration** — Proxy for GitHub stats API
-- **Admin Dashboard** — Full CRUD for projects + message inbox
-
-### 🎯 Design
-- Glassmorphism & neumorphism elements
-- Smooth Framer Motion animations
-- Gradient text & glow effects
-- Curated color palette
-- Space Grotesk + Inter typography
+- **Admin Dashboard** — Full CRUD for projects + message inbox (work in progress)
+- **Visitor Analytics** — Tracks and aggregates visitor data
 
 ---
 
 ## 📁 Project Structure
 
 ```
-├── client/                    # React + Vite Frontend
+├── client/                    # Next.js Frontend
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── effects/       # LoadingScreen, ParticleBackground
-│   │   │   ├── layout/        # Navbar, Footer, ScrollToTop
-│   │   │   └── sections/      # Hero, About, Skills, Projects, Experience, Contact
-│   │   ├── pages/             # AdminDashboard
-│   │   ├── context/           # ThemeContext
-│   │   ├── services/          # API layer
-│   │   └── utils/             # Constants (edit your info here!)
-│   └── ...
+│   │   │   ├── sections/      # HeroSection, AboutSection, SkillsSection, etc.
+│   │   │   ├── ui/            # shadcn/ui components
+│   │   │   ├── ContactModal.tsx
+│   │   │   ├── Container.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Preloader.tsx
+│   │   │   └── ErrorBoundary.tsx
+│   │   ├── lib/
+│   │   │   ├── constants.ts   # Personal data, skills, projects, services
+│   │   │   └── utils.ts       # cn() helper, scrollTo
+│   │   ├── pages/
+│   │   │   ├── _app.tsx
+│   │   │   └── index.tsx
+│   │   └── styles/
+│   ├── public/                # Static assets (images, fonts, manifest)
+│   └── next.config.js
 │
 ├── server/                    # Node.js + Express Backend
 │   ├── config/                # MongoDB connection
-│   ├── models/                # Project, Message, Admin
-│   ├── routes/                # projects, messages, auth, github
+│   ├── models/                # Project, Message, Admin, Visitor
+│   ├── routes/                # projects, messages, auth, github, visitors
 │   ├── middleware/            # JWT auth
 │   ├── utils/                 # NodeMailer
 │   ├── seed.js                # Seed database with sample data
@@ -73,7 +75,7 @@ A premium, production-ready personal portfolio web application built with modern
 ### Prerequisites
 - **Node.js** v18+
 - **MongoDB** (local or Atlas)
-- **npm** or **yarn**
+- **npm**
 
 ### 1. Clone the repository
 ```bash
@@ -102,43 +104,50 @@ node server.js
 cd client
 npm install
 
+# Optional: Configure API URL
+cp .env.example .env.local
+
 # Start the dev server
 npm run dev
 ```
 
 ### 4. Open in browser
-- **Portfolio**: http://localhost:5173
-- **Admin Dashboard**: http://localhost:5173/admin
-  - Username: `admin`
-  - Password: `admin123`
+- **Portfolio**: http://localhost:3000
+- **Admin Dashboard**: http://localhost:3000/admin (work in progress)
 
 ---
 
 ## ⚙️ Configuration
 
 ### Personal Information
-Edit `client/src/utils/constants.js` to update:
+Edit `client/src/lib/constants.ts` to update:
 - Name, bio, roles
 - Social media links
 - Skills and categories
 - Experience/timeline entries
 - Stats
+- Projects and services
 
 ### Profile Image
-Replace the placeholder in `AboutSection.jsx` with your image:
-```jsx
-<img src="/your-photo.jpg" alt="Your Name" className="w-full h-full object-cover" />
-```
-Place your photo in `client/public/`.
+Replace the placeholder in `client/public/assets/duha_image.jpeg` with your image.
 
 ### Environment Variables
-Edit `server/.env`:
+
+**Server (`server/.env`):**
 ```env
+PORT=5000
 MONGODB_URI=mongodb://localhost:27017/portfolio
-JWT_SECRET=your_secret_here
+JWT_SECRET=change_this_to_a_secure_random_string
+ADMIN_PASSWORD=change_this_to_a_secure_password
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
+FRONTEND_URL=http://localhost:3000
 GITHUB_USERNAME=your_github_username
+```
+
+**Client (`client/.env.local`):**
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 ---
@@ -149,8 +158,10 @@ GITHUB_USERNAME=your_github_username
 ```bash
 cd client
 npm run build
-# Deploy the `dist` folder to Vercel
+# Deploy the `.next` folder to Vercel
 ```
+
+Set `NEXT_PUBLIC_API_URL` to your backend URL in Vercel environment variables.
 
 ### Backend (Render/Railway)
 1. Push the `server` folder to a GitHub repo
@@ -164,15 +175,16 @@ npm run build
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 19, Vite, Framer Motion |
-| Styling | Tailwind CSS v4 |
+| Frontend | React 18, Next.js 14, TypeScript |
+| Styling | Tailwind CSS 3, shadcn/ui |
+| Animations | Framer Motion |
+| Icons | Lucide React |
 | Backend | Node.js, Express.js |
 | Database | MongoDB, Mongoose |
-| Auth | JWT, bcrypt.js |
-| Email | NodeMailer |
-| Particles | tsparticles |
-| Icons | react-icons |
-| Animations | Framer Motion |
+| Auth | JWT, bcryptjs |
+| Email | Nodemailer |
+| Validation | express-validator |
+| Rate Limiting | express-rate-limit |
 
 ---
 

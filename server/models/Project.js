@@ -51,4 +51,8 @@ const projectSchema = new mongoose.Schema({
   timestamps: true
 });
 
+projectSchema.index({ category: 1 });
+projectSchema.index({ featured: 1, order: 1 });
+projectSchema.index({ title: 'text', description: 'text' });
+
 module.exports = mongoose.model('Project', projectSchema);

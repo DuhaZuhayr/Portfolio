@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Visitor = require('../models/Visitor');
 const authMiddleware = require('../middleware/auth');
+const checkDbConnection = require('../middleware/dbHealth');
 
 // ─── Parse User Agent ───
 function parseUserAgent(ua) {
@@ -80,7 +81,7 @@ router.put('/track/:id', async (req, res) => {
 });
 
 // ─── GET: Analytics summary (admin only) ───
-router.get('/analytics', authMiddleware, async (req, res) => {
+router.get('/analytics', authMiddleware, checkDbConnection, async (req, res) => {
   try {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -173,7 +174,7 @@ router.get('/analytics', authMiddleware, async (req, res) => {
 });
 
 // ─── GET: Recent visitors (admin only) ───
-router.get('/recent', authMiddleware, async (req, res) => {
+router.get('/recent', authMiddleware, checkDbConnection, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 50;
     const visitors = await Visitor.find()

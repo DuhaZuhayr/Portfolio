@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Mail, User, Info, MessageSquare } from "lucide-react";
 import { Button } from "./ui/button";
+import { env } from "@/env";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -35,7 +36,8 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     setStatus({ type: null, message: "" });
 
     try {
-      const response = await fetch("http://localhost:5000/api/messages", {
+      const apiBaseUrl = env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const response = await fetch(`${apiBaseUrl}/api/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,10 +64,11 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         setStatus({ type: null, message: "" });
       }, 2500);
 
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to send message. Is the backend server running?";
       setStatus({
         type: "error",
-        message: err.message || "Failed to send message. Is the backend server running?",
+        message,
       });
     } finally {
       setLoading(false);

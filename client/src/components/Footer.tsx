@@ -29,7 +29,6 @@ export default function Footer() {
             <Link
               href="https://github.com/duha"
               target="_blank"
-              passHref
               className="text-foreground transition hover:text-primary"
             >
               duha
@@ -43,7 +42,6 @@ export default function Footer() {
         </span>
         <Link
           href="mailto:duha@example.com"
-          passHref
           className="text-xs text-muted-foreground hover:text-foreground"
         >
           <Button variant={"outline"}>
