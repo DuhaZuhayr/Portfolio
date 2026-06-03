@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
 const Message = require('../models/Message');
 const authMiddleware = require('../middleware/auth');
+const checkDbConnection = require('../middleware/dbHealth');
 const { sendContactEmail } = require('../utils/mailer');
 
 // Rate limit for contact form: 5 messages per 15 minutes
@@ -16,6 +17,7 @@ const contactLimiter = rateLimit({
 // POST submit contact message (public, rate-limited)
 router.post('/',
   contactLimiter,
+  checkDbConnection,
   [
     body('name').trim().notEmpty().withMessage('Name is required').isLength({ max: 100 }),
     body('email').trim().isEmail().withMessage('Valid email is required'),
@@ -50,7 +52,7 @@ router.post('/',
 );
 
 // GET all messages (admin only)
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, checkDbConnection, async (req, res) => {
   try {
     const messages = await Message.find().sort({ createdAt: -1 });
     res.json(messages);
@@ -60,7 +62,7 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // PUT mark message as read (admin only)
-router.put('/:id/read', authMiddleware, async (req, res) => {
+router.put('/:id/read', authMiddleware, checkDbConnection, async (req, res) => {
   try {
     const message = await Message.findByIdAndUpdate(
       req.params.id,
@@ -75,7 +77,7 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
 });
 
 // DELETE message (admin only)
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.delete('/:id', authMiddleware, checkDbConnection, async (req, res) => {
   try {
     const message = await Message.findByIdAndDelete(req.params.id);
     if (!message) return res.status(404).json({ message: 'Message not found' });

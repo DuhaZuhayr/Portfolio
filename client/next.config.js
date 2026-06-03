@@ -1,18 +1,7 @@
-import WithPWA from "next-pwa";
-
-const withPWA = WithPWA({
-  dest: "public",
-  disable: process.env.NODE_ENV === "development",
-  register: true,
-  scope: "/",
-  sw: "service-worker.js",
-});
-
 /**
  * @type {import('next').NextConfig}
  */
-// @ts-ignore
-const config = withPWA({
+const config = {
   reactStrictMode: true,
   output: "standalone",
   images: {
@@ -27,6 +16,6 @@ const config = withPWA({
     locales: ["en"],
     defaultLocale: "en",
   },
-});
+};
 
 export default config;

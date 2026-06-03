@@ -1,5 +1,15 @@
 const nodemailer = require('nodemailer');
 
+// Simple HTML entity escaper
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // Create transporter once at module load
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -33,12 +43,12 @@ const sendContactEmail = async ({ name, email, subject, message }) => {
             <h1 style="margin: 0; color: white; font-size: 24px;">📬 New Portfolio Message</h1>
           </div>
           <div style="padding: 24px;">
-            <p><strong style="color: #6C63FF;">From:</strong> ${name}</p>
-            <p><strong style="color: #6C63FF;">Email:</strong> ${email}</p>
-            <p><strong style="color: #6C63FF;">Subject:</strong> ${subject}</p>
+            <p><strong style="color: #6C63FF;">From:</strong> ${escapeHtml(name)}</p>
+            <p><strong style="color: #6C63FF;">Email:</strong> ${escapeHtml(email)}</p>
+            <p><strong style="color: #6C63FF;">Subject:</strong> ${escapeHtml(subject)}</p>
             <hr style="border: 1px solid #333;" />
             <p><strong style="color: #6C63FF;">Message:</strong></p>
-            <p style="background: #16213e; padding: 16px; border-radius: 8px; line-height: 1.6;">${message}</p>
+            <p style="background: #16213e; padding: 16px; border-radius: 8px; line-height: 1.6;">${escapeHtml(message)}</p>
           </div>
           <div style="background: #16213e; padding: 16px; text-align: center; font-size: 12px; color: #888;">
             Sent from Duha's Portfolio Contact Form

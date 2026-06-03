@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Project = require('../models/Project');
 const authMiddleware = require('../middleware/auth');
+const checkDbConnection = require('../middleware/dbHealth');
 
 // GET all projects (public)
 router.get('/', async (req, res) => {
@@ -14,12 +15,12 @@ router.get('/', async (req, res) => {
     const projects = await Project.find(filter).sort({ order: 1, createdAt: -1 });
     res.json(projects);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
 // GET single project (public)
-router.get('/:id', async (req, res) => {
+router.get('/:id', checkDbConnection, async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ message: 'Project not found' });
@@ -30,7 +31,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST create project (admin only)
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware, checkDbConnection, async (req, res) => {
   try {
     const project = new Project(req.body);
     await project.save();
@@ -41,7 +42,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // PUT update project (admin only)
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', authMiddleware, checkDbConnection, async (req, res) => {
   try {
     const project = await Project.findByIdAndUpdate(
       req.params.id,

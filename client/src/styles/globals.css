@@ -38,14 +38,6 @@
 
 /* global elements */
 @layer base {
-  html[data-scroll-orientation="horizontal"] {
-    body {
-      @apply w-fit;
-    }
-    [data-scroll-container] {
-      @apply flex;
-    }
-  }
   * {
     @apply border-border;
   }
